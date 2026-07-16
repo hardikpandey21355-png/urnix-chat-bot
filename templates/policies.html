@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urnix Policies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="policy-page">
+  <div class="policy-shell">
+    <a class="policy-close" href="{{ url_for('index') }}" aria-label="Close policy information">&times;</a>
+    <div class="policy-card">
+      <div class="policy-eyebrow">Important information</div>
+      <h1>How Urnix supports tournament organizers</h1>
+      <p>Urnix is built to help with tournament planning, match coordination, participant support, and event logistics. It can suggest next steps and troubleshoot common issues, but users should verify critical details.</p>
+
+      <ul class="policy-list">
+        <li>Use Urnix for guidance on schedule changes, venue setup, player check-in, bracket updates, and result tracking.</li>
+        <li>Do not rely on Urnix for legal, safety, or financial decisions without independent confirmation.</li>
+        <li>Never share passwords, payment details, or private competitor information in prompts.</li>
+        <li>Cross-check rules, timing, and official outcomes with your event documentation when precision matters.</li>
+      </ul>
+
+      <div class="policy-actions">
+        <h2>Recommended actions</h2>
+        <p>If you face a problem during an event, consult your team, verify the source of truth, and use Urnix as a helpful assistant rather than the final decision-maker.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
