@@ -516,6 +516,12 @@ body.policy-page .policy-modal-backdrop {
   display: none;
 }
 
+body.policy-page {
+  overflow-y: auto;
+  min-height: 100dvh;
+  padding: calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
+}
+
 body.policy-page .policy-shell {
   opacity: 1;
   transform: translateY(0) scale(1);
