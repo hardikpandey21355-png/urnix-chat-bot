@@ -1,33 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Urnix Policies</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="color-scheme" content="dark">
+<title>Urnix Policies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d12;
+    --surface: #12151b;
+    --surface-raised: #171b22;
+    --border: #1f242c;
+    --text: #eef1f4;
+    --text-dim: #9aa0ab;
+    --text-faint: #5c6270;
+    --accent: #39ffab;
+    --accent-deep: #1fd98d;
+    --accent-ink: #06180f;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    color-scheme: dark;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- Sticky header ---------- */
+
+  .policy-header {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: calc(16px + env(safe-area-inset-top)) 18px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    z-index: 2;
+  }
+
+  .policy-back {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+
+  .policy-back:hover,
+  .policy-back:focus-visible {
+    background: rgba(57,255,171,0.16);
+  }
+
+  .policy-back:active { transform: scale(0.94); }
+
+  .policy-header-text {
+    min-width: 0;
+  }
+
+  .policy-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+
+  .policy-header-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ---------- Scrollable body ---------- */
+
+  .policy-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 26px 20px calc(40px + env(safe-area-inset-bottom));
+  }
+
+  .policy-intro {
+    color: #dfe3e8;
+    line-height: 1.7;
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+
+  .policy-section {
+    margin-bottom: 28px;
+  }
+
+  .policy-section-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .policy-section-title .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .policy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 18px;
+  }
+
+  .policy-list {
+    list-style: none;
+    display: grid;
+    gap: 14px;
+  }
+
+  .policy-list li {
+    padding-left: 20px;
+    position: relative;
+    color: #dfe3e8;
+    line-height: 1.6;
+    font-size: 14.5px;
+  }
+
+  .policy-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  .policy-list li strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .policy-section p {
+    color: #dfe3e8;
+    line-height: 1.7;
+    font-size: 14.5px;
+  }
+
+  .policy-footer-note {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-faint);
+    text-align: center;
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+</style>
 </head>
-<body class="policy-page">
-  <div class="policy-shell">
-    <a class="policy-close" href="{{ url_for('index') }}" aria-label="Close policy information">&times;</a>
-    <div class="policy-card">
-      <div class="policy-eyebrow">Important information</div>
-      <h1>How Urnix supports tournament organizers</h1>
-      <p>Urnix is built to help with tournament planning, match coordination, participant support, and event logistics. It can suggest next steps and troubleshoot common issues, but users should verify critical details.</p>
+<body>
 
-      <ul class="policy-list">
-        <li>Use Urnix for guidance on schedule changes, venue setup, player check-in, bracket updates, and result tracking.</li>
-        <li>Do not rely on Urnix for legal, safety, or financial decisions without independent confirmation.</li>
-        <li>Never share passwords, payment details, or private competitor information in prompts.</li>
-        <li>Cross-check rules, timing, and official outcomes with your event documentation when precision matters.</li>
-      </ul>
-
-      <div class="policy-actions">
-        <h2>Recommended actions</h2>
-        <p>If you face a problem during an event, consult your team, verify the source of truth, and use Urnix as a helpful assistant rather than the final decision-maker.</p>
-      </div>
-    </div>
+<header class="policy-header">
+  <a class="policy-back" href="{{ url_for('index') }}" aria-label="Back to Urnix">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+      <path d="M12.5 4 L6.5 10 L12.5 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+  <div class="policy-header-text">
+    <div class="policy-eyebrow">Important information</div>
+    <div class="policy-header-title">Urnix Policies</div>
   </div>
+</header>
+
+<main class="policy-body">
+  <p class="policy-intro">
+    Urnix is an assistant built for tournament organizers, players, and event staff. It helps with planning, coordination, and quick answers during events — but it works alongside your judgment, not in place of it. Please read the points below before relying on it during a live event.
+  </p>
+
+  <section class="policy-section">
+    <div class="policy-section-title"><span class="dot"></span>What Urnix can help with</div>
+    <div class="policy-card">
+      <ul class="policy-list">
+        <li><strong>Scheduling —</strong> clarifying match times, round changes, and venue setup.</li>
+        <li><strong>Check-in & brackets —</strong> guidance on player check-in flow and bracket updates.</li>
+        <li><strong>On-the-day troubleshooting —</strong> suggesting next steps when something goes wrong during an event.</li>
+        <li><strong>General questions —</strong> rules clarifications, logistics, and quick lookups.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="policy-section">
+    <div class="policy-section-title"><span class="dot"></span>What to double-check yourself</div>
+    <div class="policy-card">
+      <ul class="policy-list">
+        <li><strong>Safety, legal, or financial calls —</strong> Urnix should never be the final authority on these.</li>
+        <li><strong>Match results & rules —</strong> always confirm against your official event documents when accuracy really matters.</li>
+        <li><strong>Anything Urnix seems unsure about —</strong> treat it as a starting point, and verify with your team.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="policy-section">
+    <div class="policy-section-title"><span class="dot"></span>Keep private information private</div>
+    <div class="policy-card">
+      <ul class="policy-list">
+        <li>Never share passwords, payment details, or card numbers in chat.</li>
+        <li>Avoid pasting confidential attendee or competitor information.</li>
+        <li>If something feels sensitive, it probably doesn't belong in the chat box.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="policy-section">
+    <div class="policy-section-title"><span class="dot"></span>If something goes wrong mid-event</div>
+    <p>Pause, ask a teammate for a second opinion, and confirm the plan with whoever owns the final call for that decision. Use Urnix to move faster and think things through — not as the single source of truth.</p>
+  </section>
+
+  <p class="policy-footer-note">Urnix can make mistakes. Always verify anything critical before acting on it.</p>
+</main>
+
 </body>
 </html>
