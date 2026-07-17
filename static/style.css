@@ -450,6 +450,7 @@ body {
   padding: 0;
   font: inherit;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .disclaimer-link-text {
@@ -464,8 +465,6 @@ body {
   color: var(--accent);
   text-decoration-color: var(--accent);
 }
-
-
 
 /* ---------- Responsive ---------- */
 

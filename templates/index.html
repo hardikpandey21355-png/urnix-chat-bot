@@ -67,36 +67,13 @@
 
       <p class="disclaimer">
         <span class="disclaimer-prefix">Urnix can make mistakes.</span>
-        <button class="disclaimer-link" id="policyTrigger" type="button">
+        <a class="disclaimer-link" href="{{ url_for('policies') }}">
           <span class="disclaimer-link-text">Check important information</span>
-        </button>
+        </a>
       </p>
     </div>
   </footer>
 
-</div>
-
-<div class="policy-modal-backdrop" id="policyModal" aria-hidden="true">
-  <div class="policy-shell" role="dialog" aria-modal="true" aria-labelledby="policyTitle">
-    <button class="policy-close" id="policyClose" type="button" aria-label="Close policy information">&times;</button>
-    <div class="policy-card">
-      <div class="policy-eyebrow">Important information</div>
-      <h1 id="policyTitle">How Urnix helps tournament organizers</h1>
-      <p>Urnix is built to support tournament planning, match coordination, and competition logistics. It can answer questions, suggest next steps, and help resolve problems during events, but users should always verify critical details before acting.</p>
-
-      <ul class="policy-list">
-        <li>Use Urnix to clarify schedules, venue setup, player check-in, and bracket management.</li>
-        <li>Do not rely on Urnix as the final authority for safety, legal, or financial decisions.</li>
-        <li>Do not share personal passwords, payment credentials, or confidential attendee information.</li>
-        <li>Check match rules, timings, and official results against your event documents when accuracy matters.</li>
-      </ul>
-
-      <div class="policy-actions">
-        <h2>Recommended actions</h2>
-        <p>If you hit a problem during an event, ask for a second opinion, confirm the plan with your team, and use Urnix as a guiding assistant rather than a single source of truth.</p>
-      </div>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -110,9 +87,6 @@
   const mediaItem = document.getElementById('mediaItem');
   const fileInput = document.getElementById('fileInput');
   const chipRow = document.getElementById('chipRow');
-  const policyTrigger = document.getElementById('policyTrigger');
-  const policyModal = document.getElementById('policyModal');
-  const policyClose = document.getElementById('policyClose');
 
   const botReplies = [
     "Got it — checking that for you now.",
@@ -222,11 +196,20 @@
 
     const thinkingRow = addThinkingBubble();
 
-    setTimeout(() => {
-      const reply = botReplies[Math.floor(Math.random() * botReplies.length)];
-      thinkingRow.remove();
-      addBubble({ text: reply }, 'bot');
-    }, 1400);
+    fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text })
+    })
+      .then(res => res.json())
+      .then(data => {
+        thinkingRow.remove();
+        addBubble({ text: data.reply }, 'bot');
+      })
+      .catch(() => {
+        thinkingRow.remove();
+        addBubble({ text: "Something went wrong. Please try again." }, 'bot');
+      });
   }
 
   input.addEventListener('input', updateSendState);
@@ -262,35 +245,15 @@
     fileInput.value = '';
   });
 
-  function openPolicyModal() {
-    policyModal.classList.remove('closing');
-    policyModal.classList.add('open');
-    policyModal.setAttribute('aria-hidden', 'false');
-  }
-
-  function closePolicyModal() {
-    policyModal.classList.add('closing');
-    policyModal.classList.remove('open');
-    policyModal.setAttribute('aria-hidden', 'true');
-    window.setTimeout(() => {
-      policyModal.classList.remove('closing');
-    }, 280);
-  }
-
-  policyTrigger.addEventListener('click', openPolicyModal);
-  policyClose.addEventListener('click', closePolicyModal);
-
-  policyModal.addEventListener('click', (e) => {
-    if (e.target === policyModal) closePolicyModal();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && policyModal.classList.contains('open')) closePolicyModal();
-  });
-
   document.addEventListener('click', (e) => {
     if (!plusWrap.contains(e.target)) closeMenu();
   });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
 </script>
 
 </body>
